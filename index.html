@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Signal Processing</title>
+	<script src="./../dist/Chart.bundle.js"></script>
+	<script src="./plotter.js"></script>
+	<script src="./namecolors.js"></script>
+	<style>
+		h3 { margin-bottom:0px }
+		h4 { margin-bottom:5px }
+		input[type="number"] { width:50px; vertical-align:top }
+	</style>
+</head>
+
+<body>
+	<div style="width:75%; float:left"><canvas id="canvas"></canvas></div>
+	<div style="float:left; margin-left:25px">
+		<h3>Settings</h3><br>
+		<label for="inputinterval">Input Interval:</label><br>
+		<input id="inputinterval" value="0" type="range" min="0" max="35"><input id="inputintervalvalue" type="number"><br>
+		<label for="smoothing">Smoothing:</label><br>
+		<input id="smoothing" value="0" type="range" min="0" step="1" max="719"><input id="smoothingvalue" type="number"><br>
+		<label><input id="normalize" type="checkbox">Normalize Graphs</label>
+		<h4>Datasets</h4>
+		<div id="datasets"></div>
+	</div>
+	<script>
+		window.onload = function() {
+			window.jsChart = new Chart( document.getElementById("canvas").getContext("2d"), config );
+			window.updateChart();
+		};
+		
+		document.getElementById("datasets").innerHTML = Object.keys(JSON.parse(messageDist)).map(
+			d => `<label><input id="cb${d}" type="checkbox">${d}</label>`
+		).join('<br>');
+		
+		[...document.getElementsByTagName("input")].forEach(el => {
+			if (el.id === "inputintervalvalue") {
+				return el.addEventListener('input', function(event) {
+					event.target.previousSibling.value = event.target.value;
+					window.updateChart();
+				});
+			}
+			if (el.id === "smoothingvalue") {
+				return el.addEventListener('input', function(event) {
+					event.target.previousSibling.value = event.target.value;
+					window.updateChart();
+				});
+			}
+			if (el.type === "checkbox")
+				return el.addEventListener('change', window.updateChart);
+			return el.addEventListener('input', window.updateChart);
+		});
+	</script>
+</body>
+
+</html>
