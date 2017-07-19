@@ -26,6 +26,9 @@
 		<div id="datasets"></div>
 	</div>
 	<script>
+		if (location.hash)
+			messageDist = location.hash.substr(1);
+		
 		window.onload = function() {
 			window.jsChart = new Chart( document.getElementById("canvas").getContext("2d"), config );
 			window.updateChart();
